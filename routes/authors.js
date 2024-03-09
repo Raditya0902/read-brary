@@ -1,5 +1,4 @@
 const express = require("express");
-const { route } = require(".");
 const router = express.Router();
 const Author = require("../models/author");
 
@@ -10,9 +9,9 @@ router.get("/", async (req, res) => {
     searchOptions.name = new RegExp(req.query.name, "i");
   }
   try {
-    const allAuthors = await Author.find(searchOptions);
+    const authors = await Author.find(searchOptions);
     res.render("authors/index", {
-      authors: allAuthors,
+      authors,
       searchOptions: req.query,
     });
   } catch {
@@ -22,7 +21,8 @@ router.get("/", async (req, res) => {
 
 // new author route
 router.get("/new", (req, res) => {
-  res.render("authors/new", { author: new Author() });
+  const author = new Author();
+  res.render("authors/new", { author });
 });
 
 //create new author
