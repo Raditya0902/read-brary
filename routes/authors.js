@@ -42,4 +42,35 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/:id", (req, res) => {
+  res.send("Show Author " + req.params.id);
+});
+
+router.get("/:id/edit", async (req, res) => {
+  try {
+    const author = await Author.findById(req.params.id);
+    res.render("authors/edit", { author });
+  } catch (err) {
+    res.redirect("/authors");
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const author = await Author.findById(req.params.id);
+    await author.save();
+    res.redirect(`authors/${author}`);
+    // res.redirect("authors");
+  } catch {
+    res.render("authors/new", {
+      author: author,
+      errorMessage: "Error creating Author",
+    });
+  }
+});
+
+router.delete("/:id", (req, res) => {
+  res.send("Delete Author " + req.params.id);
+});
+
 module.exports = router;
